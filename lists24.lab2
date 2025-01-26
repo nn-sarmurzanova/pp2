@@ -1,1 +1,3 @@
-
+mylist = ["Lexus", "Subaru", "Toyota"]
+newlist = mylist.copy()
+print (newlist)
