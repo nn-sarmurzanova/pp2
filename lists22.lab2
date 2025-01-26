@@ -1,1 +1,3 @@
-
+mylist = ["Lexus", "Subaru", "Toyota"]
+mylist.reverse()
+print (mylist)
