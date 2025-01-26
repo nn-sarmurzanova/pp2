@@ -1,1 +1,3 @@
-
+x = {'type' : 'fruit', 'name' : 'apple'}
+y = x.copy()
+print(y)
