@@ -1,1 +1,3 @@
-
+mylist = ["Lexus", "Subaru", "Toyota"]
+mylist.sort(reverse = True)
+print (mylist)
