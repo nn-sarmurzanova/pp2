@@ -1,1 +1,158 @@
+import random  #for task 13
+from itertools import permutations  #for task 5
+from math import pi  #for task 9
 
+
+# 1. 
+def grams_to_ounces(grams):
+    ounces = 28.3495231 * grams
+    print(f"{grams} grams = {ounces} ounces")
+
+
+grams_to_ounces(100)
+
+
+# 2. 
+def fahrenheit_to_celsius(fahrenheit):
+    celsius = (5 / 9) * (fahrenheit - 32)
+    print(f"{fahrenheit}°F = {celsius:.2f}°C")
+
+
+fahrenheit_to_celsius(100)
+
+
+# 3. 
+def solve(numheads, numlegs):
+    for chickens in range(numheads + 1):
+        rabbits = numheads - chickens
+        if (chickens * 2 + rabbits * 4) == numlegs:
+            print(f"Chickens: {chickens}, Rabbits: {rabbits}")
+            return
+    print("No solution")
+
+solve(35, 94)
+
+
+# 4. 
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(n ** 0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+
+def filter_prime(numbers):
+    primes = [n for n in numbers if is_prime(n)]
+    print("Prime numbers:", primes)
+
+
+filter_prime([10, 15, 17, 19, 23])
+
+
+# 5. 
+def string_permutations(s):
+    perms = [''.join(p) for p in permutations(s)]
+    print("String permutations:", perms)
+
+
+string_permutations("abc")
+
+
+# 6. 
+def reverse_sentence(sentence):
+    reversed_sentence = ' '.join(sentence.split()[::-1])
+    print("Reversed sentence:", reversed_sentence)
+
+
+reverse_sentence("We are ready")
+
+# 7. 
+def has_33(nums):
+    for i in range(len(nums) - 1):
+        if nums[i] == 3 and nums[i + 1] == 3:
+            print("True")
+            return
+    print("False")
+
+
+has_33([1, 3, 3])
+has_33([1, 3, 1, 3])
+has_33([3, 1, 3])
+
+
+# 8. 
+def spy_game(nums):
+    pattern = [0, 0, 7]
+    idx = 0
+    for num in nums:
+        if num == pattern[idx]:
+            idx += 1
+        if idx == len(pattern):
+            print("True")
+            return
+    print("False")
+
+
+spy_game([1, 2, 4, 0, 0, 7, 5])
+spy_game([1, 0, 2, 4, 0, 5, 7])
+spy_game([1, 7, 2, 0, 4, 5, 0])
+
+
+# 9. 
+def sphere_volume(radius):
+    volume = (4 / 3) * pi * (radius ** 3)
+    print(f"Sphere volume with radius {radius} = {volume:.2f}")
+
+
+sphere_volume(5)
+
+
+# 10. 
+def unique_elements(lst):
+    unique_list = []
+    for item in lst:
+        if item not in unique_list:
+            unique_list.append(item)
+    print("Unique elements:", unique_list)
+
+unique_elements([1, 2, 2, 3, 4, 4, 5])
+
+
+# 11. 
+def is_palindrome(s):
+    s = ''.join(s.lower().split())
+    print("True" if s == s[::-1] else "False")
+
+
+is_palindrome("madam")
+is_palindrome("hello")
+
+
+# 12. 
+def histogram(numbers):
+    for num in numbers:
+        print('*' * num)
+
+
+histogram([4, 9, 7])
+
+
+# 13. 
+def guess_the_number():
+    number = random.randint(1, 20)
+    guesses = 0
+    while True:
+        guess = random.randint(1, 20)  # Simulating user input
+        guesses += 1
+        if guess < number:
+            print("Your guess is too low")
+        elif guess > number:
+            print("Your guess is too high")
+        else:
+            print(f"Good job! You guessed the number {number} in {guesses} guesses!")
+            break
+
+
+guess_the_number()
