@@ -1,1 +1,114 @@
+import math
 
+
+# 1. 
+class StringManipulator:
+    def init(self):
+        self.s = ""
+
+    def getString(self, s):
+        self.s = s
+
+    def printString(self):
+        print(self.s.upper())
+
+
+obj = StringManipulator()
+obj.getString("hello world")
+obj.printString()
+
+
+# 2. 
+class Shape:
+    def area(self):
+        print("Area:", 0)
+
+
+class Square(Shape):
+    def init(self, length):
+        self.length = length
+
+    def area(self):
+        print("Area:", self.length ** 2)
+
+
+sq = Square(5)
+sq.area()
+
+
+# 3. 
+class Rectangle(Shape):
+    def init(self, length, width):
+        self.length = length
+        self.width = width
+
+    def area(self):
+        print("Area:", self.length * self.width)
+
+
+rect = Rectangle(4, 6)
+rect.area()
+
+
+# 4. 
+class Point:
+    def init(self, x, y):
+        self.x = x
+        self.y = y
+
+    def show(self):
+        print(f"Point: ({self.x}, {self.y})")
+
+    def move(self, new_x, new_y):
+        self.x = new_x
+        self.y = new_y
+
+    def dist(self, other_point):
+        distance = math.sqrt((self.x - other_point.x)  2 + (self.y - other_point.y)  2)
+        print(f"Distance: {distance:.2f}")
+
+
+p1 = Point(3, 4)
+p2 = Point(6, 8)
+p1.show()
+p2.show()
+p1.dist(p2)
+
+
+# 5. 
+class Account:
+    def init(self, owner, balance=0):
+        self.owner = owner
+        self.balance = balance
+
+    def deposit(self, amount):
+        self.balance += amount
+        print(f"Deposited {amount}. New balance: {self.balance}")
+
+    def withdraw(self, amount):
+        if amount > self.balance:
+            print("Insufficient funds")
+        else:
+            self.balance -= amount
+            print(f"Withdrew {amount}. New balance: {self.balance}")
+
+
+acc = Account("John", 100)
+acc.deposit(50)
+acc.withdraw(30)
+acc.withdraw(150)
+
+
+# 6. 
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+
+numbers = [10, 15, 17, 19, 23, 24, 29, 33, 37]
+prime_numbers = list(filter(lambda x: is_prime(x), numbers))
+print("Prime numbers:", prime_numbers)
