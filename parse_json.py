@@ -6,11 +6,16 @@ with open("sample-data.json", "r") as file:
 
 
 print("Interface Status\n")
-print("{:<50} {:<10} {:<10} {:<10}".format("DN", "Description", "Speed", "MTU"))
-print("="*80)
+print("{:<50} {:<15} {:<10} {:<10}".format("DN", "Description", "Speed", "MTU"))
+print("=" * 90)
 
 
-for interface in data["interfaces"]:
-    print("{:<50} {:<10} {:<10} {:<10}".format(
-        interface["dn"], interface["description"], interface["speed"], interface["mtu"]
-    ))
+for item in data["imdata"]:
+    attributes = item["l1PhysIf"]["attributes"]
+    
+    dn = attributes["dn"]
+    description = attributes["descr"] if attributes["descr"] else "Inherit"
+    speed = attributes["speed"]
+    mtu = attributes["mtu"]
+
+    print("{:<50} {:<15} {:<10} {:<10}".format(dn, description, speed, mtu))
