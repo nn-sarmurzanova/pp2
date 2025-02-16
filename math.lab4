@@ -1,1 +1,41 @@
+import math
 
+# 1. 
+def degree_to_radian(degree):
+    return round(degree * (math.pi / 180), 6)
+
+degree = 15
+print("Input degree:", degree)
+print("Output radian:", degree_to_radian(degree))
+
+# 2. 
+def trapezoid_area(height, base1, base2):
+    return round(((base1 + base2) / 2) * height, 1)
+
+height = 5
+base1 = 5
+base2 = 6
+print("Height:", height)
+print("Base, first value:", base1)
+print("Base, second value:", base2)
+print("Expected Output:", trapezoid_area(height, base1, base2))
+
+# 3. 
+def regular_polygon_area(sides, length):
+    return round((sides * (length ** 2)) / (4 * math.tan(math.pi / sides)), 1)
+
+sides = 4
+length = 25
+print("Input number of sides:", sides)
+print("Input the length of a side:", length)
+print("The area of the polygon is:", regular_polygon_area(sides, length))
+
+# 4. 
+def parallelogram_area(base, height):
+    return round(base * height, 1)
+
+base = 5
+height = 6
+print("Length of base:", base)
+print("Height of parallelogram:", height)
+print("Expected Output:", parallelogram_area(base, height))
