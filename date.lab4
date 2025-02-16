@@ -1,1 +1,26 @@
+from datetime import datetime, timedelta
 
+# 1. 
+current_date = datetime.today().date()
+date_minus_five = current_date - timedelta(days=5)
+print("Current Date:", current_date)
+print("Date minus five days:", date_minus_five)
+
+# 2. 
+yesterday = current_date - timedelta(days=1)
+tomorrow = current_date + timedelta(days=1)
+print("Yesterday:", yesterday)
+print("Today:", current_date)
+print("Tomorrow:", tomorrow)
+
+# 3. 
+now = datetime.now()
+now_without_microseconds = now.replace(microsecond=0)
+print("Current datetime:", now)
+print("Datetime without microseconds:", now_without_microseconds)
+
+# 4. 
+date1 = datetime(2025, 2, 10, 12, 0, 0)
+date2 = datetime(2025, 2, 15, 14, 30, 0)
+difference_in_seconds = (date2 - date1).total_seconds()
+print("Difference in seconds:", difference_in_seconds)
