@@ -1,1 +1,80 @@
+import os
+import shutil
 
+# 1.
+def list_contents(path):
+    directories = [d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
+    files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+    all_items = os.listdir(path)
+    return directories, files, all_items
+
+path = "."  # Change to desired path
+dirs, files, all_items = list_contents(path)
+print("Directories:", dirs)
+print("Files:", files)
+print("All contents:", all_items)
+
+# 2. 
+def check_access(path):
+    return {
+        "exists": os.path.exists(path),
+        "readable": os.access(path, os.R_OK),
+        "writable": os.access(path, os.W_OK),
+        "executable": os.access(path, os.X_OK),
+    }
+
+print("Access info:", check_access(path))
+
+# 3. 
+def path_info(path):
+    if os.path.exists(path):
+        return os.path.dirname(path), os.path.basename(path)
+    return None, None
+
+file_path = "example.txt"
+dir_part, file_part = path_info(file_path)
+print("Directory:", dir_part, "Filename:", file_part)
+
+# 4. 
+def count_lines(file_path):
+    with open(file_path, "r") as file:
+        return sum(1 for _ in file)
+
+print("Number of lines:", count_lines(file_path) if os.path.exists(file_path) else "File not found")
+
+# 5. 
+def write_list_to_file(filename, data):
+    with open(filename, "w") as file:
+        file.writelines(f"{item}\n" for item in data)
+
+write_list_to_file("output.txt", ["apple", "banana", "cherry"])
+print("List written to file.")
+
+# 6.
+def generate_text_files():
+    for letter in range(65, 91):  # ASCII values of A-Z
+        with open(f"{chr(letter)}.txt", "w") as file:
+            file.write(f"This is file {chr(letter)}\n")
+
+generate_text_files()
+print("26 text files created.")
+
+# 7. 
+def copy_file(source, destination):
+    if os.path.exists(source):
+        shutil.copy(source, destination)
+        print(f"Copied {source} to {destination}")
+    else:
+        print("Source file not found.")
+
+copy_file("output.txt", "copy_output.txt")
+
+# 8. 
+def delete_file(file_path):
+    if os.path.exists(file_path) and os.access(file_path, os.W_OK):
+        os.remove(file_path)
+        print(f"Deleted file: {file_path}")
+    else:
+        print("File does not exist or cannot be deleted.")
+
+delete_file("copy_output.txt")
