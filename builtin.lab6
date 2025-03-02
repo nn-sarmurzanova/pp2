@@ -1,1 +1,43 @@
+from functools import reduce
+import time
+import math
 
+# 1. 
+def multiply_list(numbers):
+    return reduce(lambda x, y: x * y, numbers)
+
+numbers = [2, 3, 4, 5]
+print("Multiplication result:", multiply_list(numbers))
+
+# 2. 
+def count_case(s):
+    upper = sum(1 for c in s if c.isupper())
+    lower = sum(1 for c in s if c.islower())
+    return upper, lower
+
+s = "Hello World"
+upper, lower = count_case(s)
+print("Uppercase letters:", upper, "Lowercase letters:", lower)
+
+# 3. 
+def is_palindrome(s):
+    return s == s[::-1]
+
+s = "radar"
+print(f"Is '{s}' a palindrome?", is_palindrome(s))
+
+# 4. 
+def delayed_sqrt(number, milliseconds):
+    time.sleep(milliseconds / 1000)
+    return math.sqrt(number)
+
+num, delay = 25100, 2123
+result = delayed_sqrt(num, delay)
+print(f"Square root of {num} after {delay} milliseconds is {result}")
+
+# 5. 
+def all_true(t):
+    return all(t)
+
+t = (True, True, False)
+print("Are all elements True?", all_true(t))
