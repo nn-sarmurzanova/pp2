@@ -1,1 +1,39 @@
+import pygame
 
+pygame.init()
+
+WIDTH, HEIGHT = 600, 600
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+BALL_RADIUS = 25
+STEP = 20
+
+ball_x, ball_y = WIDTH // 2, HEIGHT // 2
+
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Moving Ball")
+
+running = True
+clock = pygame.time.Clock()
+
+while running:
+    screen.fill(WHITE)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP and ball_y - STEP >= BALL_RADIUS:
+                ball_y -= STEP
+            elif event.key == pygame.K_DOWN and ball_y + STEP <= HEIGHT - BALL_RADIUS:
+                ball_y += STEP
+            elif event.key == pygame.K_LEFT and ball_x - STEP >= BALL_RADIUS:
+                ball_x -= STEP
+            elif event.key == pygame.K_RIGHT and ball_x + STEP <= WIDTH - BALL_RADIUS:
+                ball_x += STEP
+
+    pygame.draw.circle(screen, RED, (ball_x, ball_y), BALL_RADIUS)
+    pygame.display.flip()
+    clock.tick(30)
+
+pygame.quit()
