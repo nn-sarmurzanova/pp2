@@ -1,1 +1,52 @@
+import pygame
+import math
+from datetime import datetime
 
+pygame.init()
+
+WIDTH, HEIGHT = 600, 600
+WHITE = (255, 255, 255)
+
+clock_image = pygame.image.load("mickeyclock.jpeg")
+clock_image = pygame.transform.scale(clock_image, (400, 400))
+
+clock_x, clock_y = 100, 100
+center_x, center_y = clock_x + 200, clock_y + 200
+
+minute_hand = pygame.image.load("right_hand.png")  
+second_hand = pygame.image.load("left_hand.png")   
+
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Mickey Mouse Clock")
+
+running = True
+clock = pygame.time.Clock()
+
+def draw_clock():
+    screen.blit(clock_image, (clock_x, clock_y))
+    
+    now = datetime.now()
+    minute_angle = -now.minute * 6  
+    second_angle = -now.second * 6  
+
+    rotated_minute = pygame.transform.rotate(minute_hand, minute_angle)
+    rotated_second = pygame.transform.rotate(second_hand, second_angle)
+
+    min_rect = rotated_minute.get_rect(center=(center_x, center_y))
+    sec_rect = rotated_second.get_rect(center=(center_x, center_y))
+
+    screen.blit(rotated_minute, min_rect.topleft)
+    screen.blit(rotated_second, sec_rect.topleft)
+
+while running:
+    screen.fill(WHITE)
+    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    draw_clock()
+    pygame.display.flip()
+    clock.tick(30)
+
+pygame.quit()
