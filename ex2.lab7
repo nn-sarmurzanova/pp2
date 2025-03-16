@@ -1,1 +1,37 @@
+import pygame
 
+pygame.init()
+pygame.mixer.init()
+
+tracks = [
+    "/storage/emulated/0/Download/so-happy-with-my-8-bit-game-301275.mp3",
+    "/storage/emulated/0/Download/neon-gaming-128925.mp3",
+    "/storage/emulated/0/Download/a-hero-of-the-80s-126684.mp3"
+]
+track_index = 0
+
+screen = pygame.display.set_mode((400, 200))
+pygame.display.set_caption("Music Player")
+
+running = True
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                pygame.mixer.music.load(tracks[track_index])
+                pygame.mixer.music.play()
+            elif event.key == pygame.K_s:
+                pygame.mixer.music.stop()
+            elif event.key == pygame.K_n:
+                track_index = (track_index + 1) % len(tracks)
+                pygame.mixer.music.load(tracks[track_index])
+                pygame.mixer.music.play()
+            elif event.key == pygame.K_p:
+                track_index = (track_index - 1) % len(tracks)
+                pygame.mixer.music.load(tracks[track_index])
+                pygame.mixer.music.play()
+
+pygame.quit()
