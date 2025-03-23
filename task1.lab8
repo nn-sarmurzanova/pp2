@@ -1,1 +1,81 @@
+import pygame
+import random
 
+
+pygame.init()
+
+
+WIDTH, HEIGHT = 600, 700
+ROAD_WIDTH = 300
+LANE_WIDTH = ROAD_WIDTH // 3
+CAR_WIDTH, CAR_HEIGHT = 50, 90
+COIN_SIZE = 30
+WHITE, BLACK, RED, GOLD = (255, 255, 255), (0, 0, 0), (255, 0, 0), (255, 215, 0)
+
+
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Racer")
+
+
+car_img = pygame.image.load("car.png")
+car_img = pygame.transform.scale(car_img, (CAR_WIDTH, CAR_HEIGHT))
+coin_img = pygame.image.load("coin.png")
+coin_img = pygame.transform.scale(coin_img, (COIN_SIZE, COIN_SIZE))
+
+
+car_x = WIDTH // 2 - CAR_WIDTH // 2
+car_y = HEIGHT - 120
+car_speed = 5
+
+coin_x = random.choice([WIDTH // 2 - LANE_WIDTH, WIDTH // 2, WIDTH // 2 + LANE_WIDTH])
+coin_y = -50
+coin_speed = 5
+coin_collected = 0
+
+
+running = True
+while running:
+    screen.fill(WHITE)
+    
+    
+    pygame.draw.rect(screen, BLACK, (WIDTH // 2 - ROAD_WIDTH // 2, 0, ROAD_WIDTH, HEIGHT))
+    
+    
+    screen.blit(car_img, (car_x, car_y))
+    
+    
+    coin_y += coin_speed
+    if coin_y > HEIGHT:
+        coin_y = -50
+        coin_x = random.choice([WIDTH // 2 - LANE_WIDTH, WIDTH // 2, WIDTH // 2 + LANE_WIDTH])
+    
+
+    if car_x < coin_x + COIN_SIZE and car_x + CAR_WIDTH > coin_x and car_y < coin_y + COIN_SIZE and car_y + CAR_HEIGHT > coin_y:
+        coin_collected += 1
+        coin_y = -50
+        coin_x = random.choice([WIDTH // 2 - LANE_WIDTH, WIDTH // 2, WIDTH // 2 + LANE_WIDTH])
+    
+    
+    screen.blit(coin_img, (coin_x, coin_y))
+    
+    
+    font = pygame.font.Font(None, 36)
+    score_text = font.render(f"Coins: {coin_collected}", True, RED)
+    screen.blit(score_text, (450, 10))
+    
+    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    
+    
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT] and car_x > WIDTH // 2 - ROAD_WIDTH // 2:
+        car_x -= car_speed
+    if keys[pygame.K_RIGHT] and car_x < WIDTH // 2 + ROAD_WIDTH // 2 - CAR_WIDTH:
+        car_x += car_speed
+
+    pygame.display.update()
+    pygame.time.Clock().tick(30)
+
+pygame.quit()
