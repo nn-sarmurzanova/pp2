@@ -1,1 +1,90 @@
+import pygame
+import random
 
+
+pygame.init()
+
+
+WIDTH, HEIGHT = 500, 500
+CELL_SIZE = 20
+WHITE, GREEN, RED, BLUE = (255, 255, 255), (0, 255, 0), (255, 0, 0), (0, 0, 255)
+
+
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Snake Game")
+
+
+snake = [(100, 100), (90, 100), (80, 100)]
+direction = (CELL_SIZE, 0)
+food = (200, 200)
+score = 0
+level = 1
+speed = 10
+
+
+def generate_food():
+    while True:
+        new_food = (random.randint(0, (WIDTH - CELL_SIZE) // CELL_SIZE) * CELL_SIZE,
+                    random.randint(0, (HEIGHT - CELL_SIZE) // CELL_SIZE) * CELL_SIZE)
+        if new_food not in snake:
+            return new_food
+
+
+running = True
+clock = pygame.time.Clock()
+while running:
+    screen.fill(WHITE)
+    
+    
+    for segment in snake:
+        pygame.draw.rect(screen, GREEN, (*segment, CELL_SIZE, CELL_SIZE))
+    
+        pygame.draw.rect(screen, RED, (*food, CELL_SIZE, CELL_SIZE))
+    
+
+    new_head = (snake[0][0] + direction[0], snake[0][1] + direction[1])
+    
+    
+    if new_head[0] < 0 or new_head[0] >= WIDTH or new_head[1] < 0 or new_head[1] >= HEIGHT:
+        running = False
+    
+    
+    if new_head in snake:
+        running = False
+    
+    
+    snake.insert(0, new_head)
+    if new_head == food:
+        score += 1
+        food = generate_food()
+        if score % 3 == 0:
+            level += 1
+            speed += 2
+    else:
+        snake.pop()
+    
+    
+    font = pygame.font.Font(None, 36)
+    score_text = font.render(f"Score: {score} Level: {level}", True, BLUE)
+    screen.blit(score_text, (10, 10))
+    
+    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_UP] and direction != (0, CELL_SIZE):
+        direction = (0, -CELL_SIZE)
+    if keys[pygame.K_DOWN] and direction != (0, -CELL_SIZE):
+        direction = (0, CELL_SIZE)
+    if keys[pygame.K_LEFT] and direction != (CELL_SIZE, 0):
+        direction = (-CELL_SIZE, 0)
+    if keys[pygame.K_RIGHT] and direction != (-CELL_SIZE, 0):
+        direction = (CELL_SIZE, 0)
+    
+    pygame.display.update()
+    clock.tick(speed)
+
+pygame.quit()
