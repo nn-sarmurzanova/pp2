@@ -1,1 +1,40 @@
+import pygame
 
+pygame.init()
+screen = pygame.display.set_mode((600, 500))
+pygame.display.set_caption("Paint")
+
+WHITE, BLACK, RED, BLUE, GREEN = (255, 255, 255), (0, 0, 0), (255, 0, 0), (0, 0, 255), (0, 255, 0)
+current_color = BLACK
+drawing = False
+mode = "line"
+start_pos = None
+
+running = True
+while running:
+    screen.fill(WHITE)
+    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            drawing = True
+            start_pos = event.pos
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            drawing = False
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_c:
+                current_color = BLUE
+            if event.key == pygame.K_r:
+                mode = "rect"
+            if event.key == pygame.K_l:
+                mode = "line"
+            if event.key == pygame.K_e:
+                current_color = WHITE
+
+    pygame.display.update()
+
+pygame.quit()
