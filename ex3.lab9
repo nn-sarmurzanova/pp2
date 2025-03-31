@@ -1,1 +1,67 @@
+import pygame
 
+
+pygame.init()
+
+
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
+
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+GREEN = (0, 255, 0)
+
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Paint")
+
+
+def draw_square(surface, color, pos, size):
+    pygame.draw.rect(surface, color, pygame.Rect(pos[0], pos[1], size, size))
+
+def draw_right_triangle(surface, color, pos, base, height):
+    points = [(pos[0], pos[1]), (pos[0] + base, pos[1]), (pos[0], pos[1] - height)]
+    pygame.draw.polygon(surface, color, points)
+
+def draw_equilateral_triangle(surface, color, pos, size):
+    points = [
+        (pos[0], pos[1]),
+        (pos[0] + size, pos[1]),
+        (pos[0] + size / 2, pos[1] - (size * (3 ** 0.5)) / 2)
+    ]
+    pygame.draw.polygon(surface, color, points)
+
+def draw_rhombus(surface, color, pos, size):
+    points = [
+        (pos[0], pos[1] - size),
+        (pos[0] + size, pos[1]),
+        (pos[0], pos[1] + size),
+        (pos[0] - size, pos[1])
+    ]
+    pygame.draw.polygon(surface, color, points)
+
+
+running = True
+clock = pygame.time.Clock()
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    
+    screen.fill(WHITE)
+
+    
+    draw_square(screen, RED, (100, 100), 100)
+    draw_right_triangle(screen, BLUE, (300, 300), 100, 100)
+    draw_equilateral_triangle(screen, GREEN, (500, 300), 100)
+    draw_rhombus(screen, BLACK, (700, 300), 50)
+
+    pygame.display.update()
+    clock.tick(60)
+
+pygame.quit()
