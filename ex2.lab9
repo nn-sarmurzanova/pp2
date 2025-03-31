@@ -1,1 +1,125 @@
+import pygame
+import random
+import time
 
+
+pygame.init()
+
+
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
+
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+BLACK = (0, 0, 0)
+
+
+snake_block = 20
+snake_speed = 15
+
+
+font_style = pygame.font.SysFont("bahnschrift", 25)
+
+
+class Food(pygame.sprite.Sprite):
+    def init(self):
+        super().init()
+        self.size = random.randint(10, 30)  # Разный размер еды
+        self.image = pygame.Surface((self.size, self.size))
+        self.image.fill(RED)
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randint(0, SCREEN_WIDTH - self.size)
+        self.rect.y = random.randint(0, SCREEN_HEIGHT - self.size)
+        self.timer = time.time()
+
+    def update(self):
+        if time.time() - self.timer > 5:  # Еда исчезает через 5 секунд
+            self.rect.x = random.randint(0, SCREEN_WIDTH - self.size)
+            self.rect.y = random.randint(0, SCREEN_HEIGHT - self.size)
+            self.timer = time.time()
+
+class Snake:
+    def init(self):
+        self.body = [(100, 50), (90, 50), (80, 50)]  # Начальная позиция змеи
+        self.direction = "RIGHT"
+        self.length = 3  # Длина змеи
+
+    def update(self):
+        x, y = self.body[0]
+        if self.direction == "RIGHT":
+            x += snake_block
+        elif self.direction == "LEFT":
+            x -= snake_block
+        elif self.direction == "UP":
+            y -= snake_block
+        elif self.direction == "DOWN":
+            y += snake_block
+        new_head = (x, y)
+        self.body = [new_head] + self.body
+
+    def grow(self):
+        tail = self.body[-1]
+        self.body.append(tail)
+
+    def collision_with_self(self):
+        return len(self.body) != len(set(self.body))  # Если змейка пересекает себя
+
+    def collision_with_wall(self):
+        x, y = self.body[0]
+        return x < 0 or x >= SCREEN_WIDTH or y < 0 or y >= SCREEN_HEIGHT
+
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Snake Game")
+
+
+snake = Snake()
+food = Food()
+all_sprites = pygame.sprite.Group(food)
+
+
+running = True
+clock = pygame.time.Clock()
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT and snake.direction != "RIGHT":
+                snake.direction = "LEFT"
+            elif event.key == pygame.K_RIGHT and snake.direction != "LEFT":
+                snake.direction = "RIGHT"
+            elif event.key == pygame.K_UP and snake.direction != "DOWN":
+                snake.direction = "UP"
+            elif event.key == pygame.K_DOWN and snake.direction != "UP":
+                snake.direction = "DOWN"
+
+    snake.update()
+
+    
+    if pygame.sprite.collide_rect(snake, food):
+        snake.grow()
+        food = Food()
+        all_sprites = pygame.sprite.Group(food)
+
+    
+    if snake.collision_with_self() or snake.collision_with_wall():
+        running = False
+
+    
+    screen.fill(WHITE)
+    all_sprites.update()
+    all_sprites.draw(screen)
+
+    
+    for segment in snake.body:
+        pygame.draw.rect(screen, GREEN, pygame.Rect(segment[0], segment[1], snake_block, snake_block))
+
+    pygame.display.update()
+    clock.tick(snake_speed)
+
+pygame.quit()
