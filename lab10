@@ -1,1 +1,55 @@
+for i in range(5):
+        time.sleep(1)
+        score += random.randint(5, 20)
+        print(f"Level {level}: Score {score}")
 
+    return score, level
+
+def start_game():
+    username = input("Enter your username: ")
+    score, level = simple_snake_game(username)
+
+    print(f"Game over! Your final score is {score} at level {level}.")
+    save_score(username, level, score)
+
+if name == "main":
+    while True:
+        print("\nMenu:")
+        print("1. Create tables")
+        print("2. Insert data into phonebook")
+        print("3. Update data in phonebook")
+        print("4. Query data from phonebook")
+        print("5. Delete data from phonebook")
+        print("6. Save score (Snake game)")
+        print("7. Show game scores")
+        print("8. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == '1':
+            create_tables()
+        elif choice == '2':
+            name = input("Enter name: ")
+            phone = input("Enter phone: ")
+            insert_data(name, phone)
+        elif choice == '3':
+            name = input("Enter name to update: ")
+            new_phone = input("Enter new phone: ")
+            update_data(name, new_phone)
+        elif choice == '4':
+            query_data()
+        elif choice == '5':
+            name = input("Enter name to delete: ")
+            delete_data(name)
+        elif choice == '6':
+            username = input("Enter username: ")
+            level = int(input("Enter level: "))
+            score = int(input("Enter score: "))
+            save_score(username, level, score)
+        elif choice == '7':
+            show_game_scores()
+        elif choice == '8':
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice, please try again.")
