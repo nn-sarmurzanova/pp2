@@ -1,1 +1,80 @@
+-- 0
+CREATE TABLE IF NOT EXISTS phonebook (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL,
+    phone TEXT NOT NULL
+);
 
+-- 1
+CREATE OR REPLACE FUNCTION search_phonebook(pattern TEXT)
+RETURNS TABLE(id INT, username TEXT, phone TEXT)
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT id, username, phone
+    FROM phonebook
+    WHERE username ILIKE '%'  pattern  '%'
+       OR phone ILIKE '%'  pattern  '%';
+END;
+$$ LANGUAGE plpgsql;
+
+-- 2
+CREATE OR REPLACE PROCEDURE upsert_user(p_name TEXT, p_phone TEXT)
+AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM phonebook WHERE username = p_name) THEN
+        UPDATE phonebook SET phone = p_phone WHERE username = p_name;
+    ELSE
+        INSERT INTO phonebook(username, phone) VALUES (p_name, p_phone);
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 3
+CREATE OR REPLACE PROCEDURE insert_many_users(p_users JSON)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    item JSON;
+    name TEXT;
+    phone TEXT;
+    incorrect JSONB := '[]'::JSONB;
+BEGIN
+    FOR item IN SELECT * FROM json_array_elements(p_users)
+    LOOP
+        name := item->>'name';
+        phone := item->>'phone';
+
+        IF phone ~ '^\+?\d{10,15}$' THEN
+            CALL upsert_user(name, phone);
+        ELSE
+            incorrect := incorrect || jsonb_build_object('name', name, 'phone', phone);
+        END IF;
+    END LOOP;
+
+    RAISE NOTICE 'Incorrect data: %', incorrect;
+END;
+$$;
+
+-- 4
+CREATE OR REPLACE FUNCTION get_phonebook_page(p_limit INT, p_offset INT)
+RETURNS TABLE(id INT, username TEXT, phone TEXT)
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT id, username, phone
+    FROM phonebook
+    ORDER BY id
+    LIMIT p_limit OFFSET p_offset;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 5
+CREATE OR REPLACE PROCEDURE delete_user(p_name TEXT DEFAULT NULL, p_phone TEXT DEFAULT NULL)
+AS $$
+BEGIN
+    DELETE FROM phonebook
+    WHERE (p_name IS NOT NULL AND username = p_name)
+       OR (p_phone IS NOT NULL AND phone = p_phone);
+END;
+$$ LANGUAGE plpgsql;
